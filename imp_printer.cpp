@@ -1,121 +1,157 @@
 #include "imp_printer.hh"
 
+void ImpPrinter::printIndent() {
+    for (int i = 0; i < indent; i++) {
+        cout << "   ";
+    }
+}
 void ImpPrinter::print(Program* p) {
-  cout << "Program : " << endl;
-  p->accept(this);
-  return;
+    cout << "Program : " << endl;
+    p->accept(this);
+    return;
 }
 
 void ImpPrinter::visit(Program* p) {
-  p->body->accept(this);
-  return;
+    cout << "{" << endl;
+    p->body->accept(this);
+    cout << "}" << endl;
+    return;
 }
 
 void ImpPrinter::visit(Body * b) {
-  b->var_decs->accept(this);
-  b->slist->accept(this);
-  return;
+    b->var_decs->accept(this);
+    b->slist->accept(this);
+    return;
 }
 
 void ImpPrinter::visit(VarDecList* s) {
-  list<VarDec*>::iterator it;
-  for (it = s->vdlist.begin(); it != s->vdlist.end(); ++it) {
-    (*it)->accept(this);
-    cout << ";" << endl;
-  }  
-  return;
+    list<VarDec*>::iterator it;
+    for (it = s->vdlist.begin(); it != s->vdlist.end(); ++it) {
+        printIndent();
+        (*it)->accept(this);
+        cout << ";" << endl;
+    }
+    return;
 }
-			  
+
 void ImpPrinter::visit(VarDec* vd) {
-  bool first = true;
-  cout << "var " << vd->type << " ";
-  list<string>::iterator it;
-  for (it = vd->vars.begin(); it != vd->vars.end(); ++it){
-    if (!first) cout << ", ";
-    first = false;
-    cout << *it;
-  }
-  return;
+    bool first = true;
+    cout << "var " << vd->type << " ";
+    list<string>::iterator it;
+    for (it = vd->vars.begin(); it != vd->vars.end(); ++it){
+        if (!first) cout << ", ";
+        first = false;
+        cout << *it;
+    }
+    return;
 }
 
 void ImpPrinter::visit(StatementList* s) {
-  cout << "{" << endl;
-  list<Stm*>::iterator it;
-  for (it = s->slist.begin(); it != s->slist.end(); ++it) {
-    (*it)->accept(this);
-    cout << ";" << endl;
-  }
-  cout << "}" << endl;
-  return;
+    list<Stm*>::iterator it;
+    for (it = s->slist.begin(); it != s->slist.end(); ++it) {
+        printIndent();
+
+        (*it)->accept(this);
+        cout << ";" << endl;
+    }
+    return;
 }
 
 void ImpPrinter::visit(AssignStatement* s) {
-  cout << s->id << " = ";
-  s->rhs->accept(this);
-  return;
+    cout << s->id << " = ";
+    s->rhs->accept(this);
+    return;
 }
 
 void ImpPrinter::visit(PrintStatement* s) {
-  cout << "print(";
-  s->e->accept(this);
-  cout << ")";
-  return;
+    cout << "print(";
+    s->e->accept(this);
+    cout << ")";
+    return;
 }
 
 void ImpPrinter::visit(IfStatement* s) {
-  cout << "if (";
-  s->cond->accept(this);
-  cout << ") then" << endl;;
-  s->tbody->accept(this);
-  if (s->fbody!=NULL) {
-    cout << "else" << endl;
-    s->fbody->accept(this);
-  }
-  cout << "endif";
-  return;
+    cout << "if (";
+    s->cond->accept(this);
+    cout << ") then {" << endl;
+    indent++;
+    s->tbody->accept(this);
+    indent--;
+    printIndent();
+    cout << "}" << endl;
+    if (s->fbody!=NULL) {
+        printIndent();
+        cout << "else {" << endl;
+        indent++;
+        s->fbody->accept(this);
+        indent--;
+        printIndent();
+        cout << "}" << endl;
+    }
+    printIndent();
+    cout << "endif";
+    return;
 }
 
 void ImpPrinter::visit(WhileStatement* s) {
-  cout << "while (";
-  s->cond->accept(this);
-  cout << ") do" << endl;;
-  s->body->accept(this);
-  cout << "endwhile";
-  return;
+    cout << "while (";
+    s->cond->accept(this);
+    cout << ") do {" << endl;
+    indent++;
+    s->body->accept(this);
+    indent--;
+    printIndent();
+    cout << "}" << endl;
+    printIndent();
+    cout << "endwhile";
+    return;
 }
 
+void ImpPrinter::visit(DoWhileStatement* s) {
+    cout << "do {" << endl;
+    indent++;
+    s->body->accept(this);
+    indent--;
+    printIndent();
+    cout << "} while (";
+    s->cond->accept(this);
+    cout << ")";
+    return;
+}
 
 int ImpPrinter::visit(BinaryExp* e) {
-  e->left->accept(this);
-  cout << ' ' << Exp::binopToString(e->op) << ' ';
-  e->right->accept(this);
-  return 0;
+    e->left->accept(this);
+    cout << ' ' << Exp::binopToString(e->op) << ' ';
+    e->right->accept(this);
+    return 0;
 }
 
+
+
 int ImpPrinter::visit(NumberExp* e) {
-  cout << e->value;
-  return 0;
+    cout << e->value;
+    return 0;
 }
 
 int ImpPrinter::visit(IdExp* e) {
-  cout << e->id;
-  return 0;
+    cout << e->id;
+    return 0;
 }
 
 int ImpPrinter::visit(ParenthExp* ep) {
-  cout << '(';
-  ep->e->accept(this);
-  cout << ')';
-  return 0;
+    cout << '(';
+    ep->e->accept(this);
+    cout << ')';
+    return 0;
 }
 
 int ImpPrinter::visit(CondExp* e) {
-  cout << "ifexp(";
-  e->cond->accept(this);
-  cout << ",";
-  e->etrue->accept(this);
-  cout << ",";
-  e->efalse->accept(this);
-  cout << ')';
-  return 0;
+    cout << "ifexp(";
+    e->cond->accept(this);
+    cout << ",";
+    e->etrue->accept(this);
+    cout << ",";
+    e->efalse->accept(this);
+    cout << ')';
+    return 0;
 }
