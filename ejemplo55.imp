@@ -1,0 +1,8 @@
+var int x, n; // variables globales: x(1), n(2)
+n = 10;
+x = 0;
+if x < n then
+    var bool a, b, x; //validas dentro de if-then: a(3), b(4), x(5)
+else
+    var bool c, d;
+endif
