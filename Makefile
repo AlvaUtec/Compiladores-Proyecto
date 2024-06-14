@@ -9,9 +9,9 @@ SRC_SVM=svm_run.cpp svm_parser.cpp svm.cpp
 imp: $(SRC_IMP)
 	$(CC) -o imp  $(SRC_IMP)
 
-compiler: $(SRC_IgMP)
+compiler: $(SRC_COMP)
 	$(CC) -o compile  $(SRC_COMP)
 
 svm: $(SRC_SVM)
-	$(CC) -o svm  $(SRC_SVM)
+	$(CC) -o svm  $(SRC_SVM)	
 
