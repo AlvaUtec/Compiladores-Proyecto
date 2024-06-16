@@ -242,15 +242,14 @@ VarDecList* Parser::parseVarDecList() {
 }
 
 StatementList* Parser::parseStatementList() {
-    StatementList* p = new StatementList();
-    while(true) {
-        if (current->type == Token::END || current->type == Token::ENDIF || current->type == Token::ELSE || current->type == Token::ENDWHILE)
-            break;
-        p->add(parseStatement());
-        (match(Token::SEMICOLON));
+  StatementList* p = new StatementList();
+//  cout << "current: " << previous << endl;
+    p->add(parseStatement());
 
-    }
-    return p;
+  while (match(Token::SEMICOLON)) {
+    p->add(parseStatement());
+  }
+  return p;
 }
 
 /*

@@ -36,7 +36,7 @@ void ImpCodeGen::codegen(Program* p, string outfname) {
     outfile.open(outfname);
     outfile << code.str();
     outfile.close();
-    cout << "Memoria variables locales: " << mem_locals << endl;
+    cout << "Memoria variables: " << (mem_locals-1) << endl;
     return;
 }
 
@@ -45,12 +45,15 @@ void ImpCodeGen::visit(Program* p) {
     // Primera pasada: solo calcula mem_locals
     p->body->accept(this);
 
-    // Inicializa variables
     siguiente_direccion = 0;
     code.str("");           // limpia el buffer
     code.clear();              // limpia el flag de error
     // Segunda pasada: genera el código
     codegen(nolabel,"alloc",mem_locals);
+    nolabel = "";
+    current_label = 0;
+    siguiente_direccion = 1;
+    mem_locals = 0;
     p->body->accept(this);
     codegen(nolabel,"halt");
     return;
