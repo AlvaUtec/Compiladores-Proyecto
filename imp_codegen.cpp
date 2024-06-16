@@ -36,7 +36,7 @@ void ImpCodeGen::codegen(Program* p, string outfname) {
     outfile.open(outfname);
     outfile << code.str();
     outfile.close();
-    cout << "Memoria variables locales: " << mem_locals << endl;
+    cout << "Memoria variables: " << (mem_locals-1) << endl;
     return;
 }
 
