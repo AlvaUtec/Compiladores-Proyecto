@@ -1,0 +1,14 @@
+var int x;
+var bool b;
+x = 100;
+b = 0 < 10;
+if x < 500 then
+  var int y;
+  y = 15;
+  x = 500;
+  print(x+y)
+endif;
+print(x)
+
+
+

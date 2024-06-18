@@ -1,0 +1,13 @@
+var int x;
+x = 10;
+while (x < 10) do
+x = x + 1;
+print(x)
+endwhile;
+print(x);
+x = 10;
+do
+x = x + 1
+while (x < 10)
+endwhile;
+print(x)

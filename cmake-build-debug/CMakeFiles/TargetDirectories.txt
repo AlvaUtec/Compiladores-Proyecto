@@ -1,0 +1,4 @@
+C:/Users/Jesus Egusquiza/Desktop/ciclo5/compiladores/proyecto_parte1/proyecto/cmake-build-debug/CMakeFiles/proyecto.dir
+C:/Users/Jesus Egusquiza/Desktop/ciclo5/compiladores/proyecto_parte1/proyecto/cmake-build-debug/CMakeFiles/proyecto_svm.dir
+C:/Users/Jesus Egusquiza/Desktop/ciclo5/compiladores/proyecto_parte1/proyecto/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Jesus Egusquiza/Desktop/ciclo5/compiladores/proyecto_parte1/proyecto/cmake-build-debug/CMakeFiles/rebuild_cache.dir
